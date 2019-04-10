@@ -33,9 +33,9 @@ async def test_remove():
 def test_mkdir_and_rmdir():
     """Test the mkdir and rmdir call."""
     directory = join(dirname(__file__), 'resources', 'test_dir')
-    yield from aiofiles.os.mkdir(directory)
+    await aiofiles.os.mkdir(directory)
     assert isdir(directory)
-    yield from aiofiles.os.rmdir(directory)
+    await aiofiles.os.rmdir(directory)
     assert exists(directory) is False
 
 
@@ -45,9 +45,9 @@ def test_rename():
     """Test the rename call."""
     old_filename = join(dirname(__file__), 'resources', 'test_file1.txt')
     new_filename = join(dirname(__file__), 'resources', 'test_file2.txt')
-    yield from aiofiles.os.rename(old_filename, new_filename)
+    await aiofiles.os.rename(old_filename, new_filename)
     assert exists(old_filename) is False and exists(new_filename)
-    yield from aiofiles.os.rename(new_filename, old_filename)
+    await aiofiles.os.rename(new_filename, old_filename)
     assert exists(old_filename) and exists(new_filename) is False
 
 
@@ -114,3 +114,77 @@ async def test_sendfile_socket(unused_tcp_port):
     server.close()
 
     await server.wait_closed()
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_exists():
+    """Test path.exists call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.exist(filename)
+    print(result)
+    assert result
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_isfile():
+    """Test path.isfile call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.isfile(filename)
+    assert result
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_isdir():
+    """Test path.isdir call."""
+    filename = join(dirname(__file__), 'resources')
+    result = await aiofiles.os.path.isdir(filename)
+    assert result
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_getsize():
+    """Test path.getsize call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.getsize(filename)
+    assert result == 10
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_samefile():
+    """Test path.samefile call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.samefile(filename, filename)
+    assert result
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_getmtime():
+    """Test path.getmtime call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.getmtime(filename)
+    assert result
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_getatime():
+    """Test path.getatime call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.getatime(filename)
+    assert result
+
+
+@asyncio.coroutine
+@pytest.mark.asyncio
+def test_getctime():
+    """Test path. call."""
+    filename = join(dirname(__file__), 'resources', 'test_file1.txt')
+    result = await aiofiles.os.path.getctime(filename)
+    assert result
+
